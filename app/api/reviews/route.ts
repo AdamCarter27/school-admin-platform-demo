@@ -1,4 +1,11 @@
 import { supabaseAdmin } from '@/lib/supabase'
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
+import { HumanMessage } from '@langchain/core/messages'
+
+const model = new ChatGoogleGenerativeAI({
+    model: 'gemini-2.5-flash-lite',
+    apiKey: process.env.GOOGLE_API_KEY,
+    })
 
 export async function POST(req: Request) {
     const { teacher_id } = await req.json()
@@ -27,23 +34,26 @@ export async function POST(req: Request) {
     const avg =
         observations.reduce
         (
-        (sum, o) => sum + o.engagement_score,
-        0
+            (sum, o) => sum + o.engagement_score,
+            0
         ) / observations.length
 
-    // Simple summary (add gpt summary later)
     let summary = ""
 
-    if (avg >= 8) {
-        summary = "Strong classroom engagement observed."
-    } 
-    else if (avg >= 5) {
-        summary = "Moderate engagement, room for improvement."
-    } 
-    else {
-        summary = "Low engagement, needs attention."
-    }
+    try 
+    {
+        const response = await model.invoke([
+            new HumanMessage(`You are an educational performance analyst. Based on the following classroom observations, write a concise 2-3 sentence professional summary of this teacher's performance. Focus on patterns in engagement and specific notes. Be constructive and specific. 
+            Observations: ${JSON.stringify(observations)}`)
+        ])
 
+        summary = response.text
+    } 
+    catch (err) 
+    {
+        console.error("Error generating review:", err)
+        summary = "Failed to generate a review summary."
+    }
     return Response.json
     ({
         avg_engagement: avg.toFixed(2),
