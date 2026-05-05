@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function ObservationsPage() {
     const [notes, setNotes] = useState('')
@@ -7,8 +7,8 @@ export default function ObservationsPage() {
     const [successfulSubmit, setSuccessfulSubmit] = useState(false)
     const [teachers, setTeachers] = useState<any[]>([])
     const [teacherId, setTeacherId] = useState<number | null>(null)
-    useEffect(() => 
-    {
+
+    useEffect(() => {
         fetch('/api/teachers')
             .then((res) => res.json())
             .then((data) => {
@@ -17,14 +17,12 @@ export default function ObservationsPage() {
             })
     }, [])
 
-
-    const handleSubmit = async () => 
-    {
-        await fetch('/api/observations', 
-        {
+    const handleSubmit = async () => {
+        if (!teacherId) return
+        await fetch('/api/observations', {
             method: 'POST',
             body: JSON.stringify({
-                teacher_id: 1,
+                teacher_id: teacherId,
                 scores: { engagement },
                 notes,
             }),
@@ -32,13 +30,9 @@ export default function ObservationsPage() {
         setSuccessfulSubmit(true)
     }
 
-    const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) => 
-    {
+    const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = Number(e.target.value)
-        if (value >= 0 && value <= 10) 
-        {
-            setEngagement(value)
-        }
+        if (value >= 0 && value <= 10) setEngagement(value)
     }
 
     return (
@@ -47,6 +41,18 @@ export default function ObservationsPage() {
 
                 <h1 className="text-3xl font-bold text-gray-900">New Observation</h1>
                 <p className="text-gray-500 mt-1">Record classroom notes and engagement</p>
+
+                <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Teacher</label>
+                    <select
+                        className="w-full border border-gray-300 rounded-lg p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        onChange={(e) => setTeacherId(Number(e.target.value))}
+                    >
+                        {teachers.map((t) => (
+                            <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                    </select>
+                </div>
 
                 <div className="mt-6">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
