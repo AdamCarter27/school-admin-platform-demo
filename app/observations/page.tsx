@@ -1,13 +1,27 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function ObservationsPage() {
     const [notes, setNotes] = useState('')
     const [engagement, setEngagement] = useState(3)
     const [successfulSubmit, setSuccessfulSubmit] = useState(false)
+    const [teachers, setTeachers] = useState<any[]>([])
+    const [teacherId, setTeacherId] = useState<number | null>(null)
+    useEffect(() => 
+    {
+        fetch('/api/teachers')
+            .then((res) => res.json())
+            .then((data) => {
+                setTeachers(data)
+                if (data.length > 0) setTeacherId(data[0].id)
+            })
+    }, [])
 
-    const handleSubmit = async () => {
-        await fetch('/api/observations', {
+
+    const handleSubmit = async () => 
+    {
+        await fetch('/api/observations', 
+        {
             method: 'POST',
             body: JSON.stringify({
                 teacher_id: 1,
@@ -18,9 +32,11 @@ export default function ObservationsPage() {
         setSuccessfulSubmit(true)
     }
 
-    const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement>) => 
+    {
         const value = Number(e.target.value)
-        if (value >= 0 && value <= 10) {
+        if (value >= 0 && value <= 10) 
+        {
             setEngagement(value)
         }
     }
