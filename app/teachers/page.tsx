@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import {  useRouter } from 'next/navigation'
 
 export default function TeachersPage() {
     const [teachers, setTeachers] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
     useEffect(() => {
         fetch('/api/teachers')
@@ -33,9 +35,13 @@ export default function TeachersPage() {
                                     <p>Avg Engagement: {t.avg}</p>
                                     <p>Observations: {t.observations}</p>
                                 </div>
-                                <button className="mt-4 text-blue-600 font-medium">
+                                <button
+                                    onClick={() => router.push(`/teachers/${t.id}`)}
+                                    className="mt-4 text-blue-600 font-medium"
+                                >
                                     View Details →
                                 </button>
+
                             </div>
                         ))}
                     </div>
