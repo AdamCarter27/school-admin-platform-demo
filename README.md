@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# School Administration & Staff Performance Evaluation Platform
 
-## Getting Started
+A full-stack K-12 school management platform built for administrators to track teacher performance through classroom observations, AI-powered reviews, and goal monitoring.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js** — frontend and API routes
+- **Supabase** — PostgreSQL database
+- **Tailwind CSS** — styling
+- **Google Gemini 2.5 Flash** — AI summaries
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Classroom Observations
+Admins select a teacher, write observation notes, and rate classroom engagement on a 0–10 scale. Data is stored instantly and reflected across the platform.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### AI-Powered Reviews
+The reviews page fetches all observations for a selected teacher and sends them to Gemini, which generates a professional 2–3 sentence performance summary based on the actual notes — not just the average score.
 
-## Learn More
+### Goal Tracking
+Admins set improvement goals per teacher and track progress through three statuses: pending, in progress, and completed.
 
-To learn more about Next.js, take a look at the following resources:
+### Dashboard
+A real-time school-wide overview showing average engagement, total observations, top performing teachers, and staff flagged as needing attention.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Teacher Profiles
+Each teacher has a detail page showing their full observation history, engagement score, and active goals in one place.
